@@ -1,0 +1,38 @@
+SpaddTxT-c/
+│
+├──Documentation/
+│
+│   ├── Structure.txt
+│
+├── src/
+│
+│   ├── main.c
+│   │
+│   ├── editor/
+│   │   ├── editor.c
+│   │   └── editor.h
+│   │
+│   ├── buffer/
+│   │   ├── buffer.c
+│   │   └── buffer.h
+│   │	
+│   ├── screen/
+│   │   ├── screen.c
+│   │   ├── screen.h
+│   │   ├── statusbar.c
+│   │   └── statusbar.h
+│   │
+│   ├── input/
+│   │   ├── input.c
+│   │   └── input.h
+│   │
+│   └── file/
+│       ├── fileio.c
+│       └── fileio.h
+│
+├── tests/
+│
+├── docs/
+│
+├── Makefile
+└── README.md
