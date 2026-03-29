@@ -21,7 +21,7 @@ A tui text editor written in C using ncurses.
 - Search functionality
 - Undo/redo system
 
-##Next Commit Goals
+## Next Commit Goals
 - Allow line inserting between lines and in middle of line
 - Add bounds to cursor and implement wrapping to next or previous line
 

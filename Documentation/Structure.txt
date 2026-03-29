@@ -6,7 +6,7 @@ SpaddTxT-c/
 │
 ├── src/
 │
-│   ├── main.c
+│   ├── SpaddTxT.c
 │   │
 │   ├── editor/
 │   │   ├── editor.c
@@ -32,7 +32,6 @@ SpaddTxT-c/
 │
 ├── tests/
 │
-├── docs/
 │
-├── Makefile
+├── makefile
 └── README.md
