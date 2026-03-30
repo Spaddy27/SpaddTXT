@@ -8,7 +8,7 @@
 
 void input_handle_key(Editor *editor, int key) {
     switch (key) {
-        case 'q':
+        case CTRL('e'):
             editor_shutdown(editor);
             break;
         case '\n':

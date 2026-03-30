@@ -10,20 +10,20 @@ A tui text editor written in C using ncurses.
 - Dynamic line buffer
 - Character insertion/deletion
 - Horizontal scrolling for long lines
-- Basic arrow key navigation
+- Arrow key navigation
+- Line insertion
 
 ## Planned Features
 
 - File opening/saving
-- Line insertion/deletion
+- Line deletion
 - Keyboard shortcuts
 - Clipboard
 - Search functionality
 - Undo/redo system
 
 ## Next Commit Goals
-- Allow line inserting between lines and in middle of line
-- Add bounds to cursor and implement wrapping to next or previous line
+- Handle beginning of line deletion
 
 ## Build
 

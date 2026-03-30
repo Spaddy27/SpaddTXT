@@ -16,8 +16,8 @@ void buffer_insert_char(Buffer *buffer, int row, int col, char c);
 void buffer_delete_char(Buffer *buffer, int row, int col);
 
 
-void buffer_insert_line(Buffer *buffer, int index,const char *text);
-void buffer_delete_line(Buffer *buffer, int index);
+void buffer_insert_line(Buffer *buffer, int index,int col,const char *text);
+void buffer_delete_line(Buffer *buffer, int index,int col);
 char* buffer_get_line(Buffer *buffer,int index);
 
 void buffer_free(Buffer *buffer);

@@ -21,6 +21,8 @@ void editor_init(Editor *editor) {
 
     editor->buffer = calloc(1, sizeof(Buffer));
     buffer_init(editor->buffer);
+
+   // editor_insert_line(editor);//PLACE FIRST LINE
 }
 
 void editor_shutdown(Editor *editor) {
@@ -45,49 +47,49 @@ void editor_delete_char(Editor *editor) {
 
 
 void editor_insert_line(Editor *editor) {
+  //  editor_insert_char(editor, "\n");
     editor->cursor_y++;
+
+    buffer_insert_line(editor->buffer, editor->cursor_y,editor->cursor_x, NULL);
     editor->cursor_x = 0;
-    buffer_insert_line(editor->buffer, editor->cursor_y, '\0');
 }
 
 void editor_delete_line(Editor *editor) {}
 
 void editor_move_cursor(Editor *editor, int x, int y) {
-    //TODO-prevent illegal moves
-    //IF X TRIES TO GO BELOW 0, WRAP TO END OF PREV LINE
+
+    char *currentLine = buffer_get_line(editor->buffer,editor->cursor_y);
+    char *targetLine=buffer_get_line(editor->buffer,y);
 
 
-    /*char *targetLine=buffer_get_line(editor->buffer,y);
- //   char *prevLine= buffer_get_line(editor->buffer,y-1);
- //   char *nextLine= buffer_get_line(editor->buffer,y+1);
+    if (y<0 ||y>=editor->buffer->line_count)return;//prevent going to non-existent line
 
-    if (x<0)//IF X TRIES TO GO BELOW 0, WRAP TO END OF PREV LINE(GO TO BEFORE \n?)
+    if (x<0)//IF X TRIES TO GO BELOW 0, WRAP TO END OF PREV LINE
     {
         y--;
         if (y<0)return;
 
          targetLine=buffer_get_line(editor->buffer,y);
-        if (targetLine==NULL)return;
+        if (targetLine==NULL){return;}
         editor->cursor_x = strlen(targetLine)-1;
         editor->cursor_y = y;
         return;
-    }*/
-    /*if (x<0&&y>0) {//IF X TRIES TO GO BELOW 0, WRAP TO END OF PREV LINE(GO TO BEFORE \n?)
-
-
-        if (prevLine==NULL)return;
-        editor->cursor_x = strlen(prevLine);
-        editor->cursor_y --;
-       // return;
     }
-    else if (x>=) {//IF X IS PAST END OF LINE, WRAP TO START OF NEXT LINE IF THERE IS ONE
 
-        if (prevLine==NULL)return;
-        editor->cursor_x = strlen(prevLine);
-        editor->cursor_y ++;
-    }*/
-    //if (y<0) return; //IF Y TRIES TO GO BELOW 0, BLOCK ACTION
-    //E
+    else if (x>=strlen(targetLine)) {//IF X IS PAST END OF LINE, WRAP TO START OF NEXT LINE IF THERE IS ONE
+
+        if (targetLine==currentLine) {
+            if (!buffer_get_line(editor->buffer,y+1))return;
+            editor->cursor_x = 0;
+            editor->cursor_y =y+1;
+        }
+        else { //GO TO MAX LINE LENGTH UPON VERTICAL MOVE PAST END OF LINE
+            editor->cursor_x = strlen(targetLine)-1;
+            editor->cursor_y =y;
+        }
+        return;
+    }
+
     editor->cursor_x = x;
     editor->cursor_y = y;
 }

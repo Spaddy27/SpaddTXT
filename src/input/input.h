@@ -1,7 +1,7 @@
 //#include <ncurses.h>
 //#include <locale.h>
 #include "../editor/editor.h"
-#define CTRL_KEY(k) ((k) & 0x1f)
+#define CTRL(c) ((c) & 0x1F)
 #ifndef INPUT_H
 #define INPUT_H
 
