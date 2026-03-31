@@ -8,6 +8,7 @@
 
 void initScreen(Editor *editor) {
     getmaxyx(stdscr, editor->screen_y, editor->screen_x);
+    screen_render(editor);
 }
 
 void screen_render(Editor *editor) {

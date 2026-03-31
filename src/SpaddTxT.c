@@ -30,7 +30,7 @@ int main(void) {
     while (editor.running) {
         int key = getch();
         input_handle_key(&editor, key);
-        //   move(editor.cursor_y, editor.cursor_x);
+
         screen_render(&editor);
     }
 

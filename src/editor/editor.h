@@ -2,8 +2,13 @@
 // Created by mspad on 3/24/2026.
 //
 #include "../buffer/buffer.h"
+
+
+
+
 #ifndef EDITOR_H
 #define EDITOR_H
+
 
 
 
@@ -37,7 +42,7 @@ void editor_insert_char(Editor *editor, char c);
 void editor_delete_char(Editor *editor);
 
 
-void editor_insert_line(Editor *editor);
+void editor_insert_line(Editor *editor,const char *line);
 void editor_delete_line(Editor *editor);
 
 void editor_move_cursor(Editor *editor, int x, int y);

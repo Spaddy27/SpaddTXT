@@ -7,7 +7,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <locale.h>
-
+#include "../file/fileio.h"
 void editor_init(Editor *editor) {
     editor->cursor_x = 0;
     editor->cursor_y = 0;
@@ -23,14 +23,18 @@ void editor_init(Editor *editor) {
     buffer_init(editor->buffer);
 
    // editor_insert_line(editor);//PLACE FIRST LINE
+    editor_open_file(editor,"example.txt");
 }
 
 void editor_shutdown(Editor *editor) {
     //TODO-free buffer?
+    file_save_as(editor,"SpaddTxTOUT.txt",1);//HARDCODED OUTPUT
     editor->running = 0;
 }
 
 void editor_open_file(Editor *editor, const char *filename) {
+    file_open(editor,filename,1);
+
 }
 
 
@@ -46,11 +50,11 @@ void editor_delete_char(Editor *editor) {
 
 
 
-void editor_insert_line(Editor *editor) {
-  //  editor_insert_char(editor, "\n");
-    editor->cursor_y++;
+void editor_insert_line(Editor *editor,const char *line) {
 
-    buffer_insert_line(editor->buffer, editor->cursor_y,editor->cursor_x, NULL);
+
+    buffer_insert_line(editor->buffer, editor->cursor_y,editor->cursor_x, line);
+    editor->cursor_y++;
     editor->cursor_x = 0;
 }
 

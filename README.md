@@ -12,10 +12,10 @@ A tui text editor written in C using ncurses.
 - Horizontal scrolling for long lines
 - Arrow key navigation
 - Line insertion
+- File opening/saving
 
 ## Planned Features
 
-- File opening/saving
 - Line deletion
 - Keyboard shortcuts
 - Clipboard
@@ -24,6 +24,7 @@ A tui text editor written in C using ncurses.
 
 ## Next Commit Goals
 - Handle beginning of line deletion
+- Select file to open or save to
 
 ## Build
 
