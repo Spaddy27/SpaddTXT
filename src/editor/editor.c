@@ -44,8 +44,25 @@ void editor_insert_char(Editor *editor, char c) {
 }
 
 void editor_delete_char(Editor *editor) {
+    size_t origLen = strlen(buffer_get_line(editor->buffer,editor->cursor_y));
     buffer_delete_char(editor->buffer, editor->cursor_y, editor->cursor_x);
     editor->cursor_x--;
+    //HANDLE BACK WRAP
+
+
+    if (editor->cursor_x < 0) {
+        editor->cursor_y--;
+        if (editor->cursor_y < 0) {
+           editor->cursor_y = 0;
+            return;
+       }
+        char *line=buffer_get_line(editor->buffer,editor->cursor_y);
+        size_t len = strlen(line);
+       editor->cursor_x = len-origLen;
+    }
+
+
+
 }
 
 

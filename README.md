@@ -23,7 +23,6 @@ A tui text editor written in C using ncurses.
 - Undo/redo system
 
 ## Next Commit Goals
-- Handle beginning of line deletion
 - Select file to open or save to
 
 ## Build

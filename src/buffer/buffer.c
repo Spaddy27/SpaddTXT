@@ -123,12 +123,33 @@ void buffer_insert_line(Buffer *buf, int row, int col, const char *text) {
 }
 
 void buffer_delete_char(Buffer *buf, int row, int col) {
-    char *line = buf->lines[row]; //corresponding line in the buffer
+    char *line = buffer_get_line(buf,row); //corresponding line in the buffer
+    size_t lineLen = strlen(line);
     //TODO-handle with start of line delete
-    memmove(line + col - 1, line + col, strlen(line) - 1);
+    if (col == 0) {
+        if (row==0)return;
+
+        char *prevLine = buffer_get_line(buf,row - 1);
+        size_t prevLen = strlen(prevLine);
 
 
-    buf->lines[row] = line;
+        char *newLine = calloc(prevLen + lineLen + 2, sizeof(char));
+        memcpy(newLine, prevLine, prevLen-1);
+        memcpy(&newLine[prevLen-1], line, lineLen);
+        memset(buf->lines[row], '\0', lineLen);
+
+        buf->lines[row -1] = newLine;
+        memmove(&buf->lines[row],
+            &buf->lines[row+1],
+            sizeof(char*) * (buf->line_count - row - 1));
+
+        buf->line_count--;
+    }else {
+        memmove(line + col - 1, line + col, strlen(line) - 1);
+
+
+        buf->lines[row] = line;
+    }
 }
 
 void buffer_insert_char(Buffer *buf, int row, int col, char c) {
