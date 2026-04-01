@@ -13,9 +13,9 @@ int main(void) {
     setlocale(LC_ALL, "");
     initscr();
     //	cbreak();               /* Disable line buffering */
-    noecho();                   /* Don't echo() while we do getch */
-    keypad(stdscr, TRUE);       /* Enable function keys like F1, arrow keys, etc. */
-    scrollok(stdscr, TRUE);     //ENABLE BOTTOM OF WINDOW SCROLL
+    noecho(); /* Don't echo() while we do getch */
+    keypad(stdscr, TRUE); /* Enable function keys like F1, arrow keys, etc. */
+    scrollok(stdscr, TRUE); //ENABLE BOTTOM OF WINDOW SCROLL
     //Create Components
     Editor editor;
     Input in;
@@ -44,4 +44,3 @@ int main(void) {
 
     return 0;
 }
-

@@ -7,13 +7,13 @@
 
 
 void file_open(Editor *editor, const char *filename, int format){
-  Buffer *buffer = editor->buffer;
+
   char *line = NULL; // Initialize line pointer to NULL for automatic allocation
     size_t len = 0;    // Initialize size to 0
     ssize_t read;      // Variable to store the number of characters read
-    int y=0;
+
   FILE *fp = fopen(filename, "r");
- // int y=0;
+
   if (fp == NULL) {
         perror("Error opening file");
         return ;
@@ -23,7 +23,8 @@ void file_open(Editor *editor, const char *filename, int format){
 
     }
 
-    // Free the dynamically allocated buffer
+	editor_move_cursor(editor, 0, 0);
+
     if (line) {
        // free(line);
     }
