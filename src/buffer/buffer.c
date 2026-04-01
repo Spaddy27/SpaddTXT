@@ -165,7 +165,8 @@ void buffer_insert_char(Buffer *buf, int row, int col, char c) {
     char *line = buffer_get_line(buf, row); //find the corresponding line in the buffer
 
     if (line == NULL) {
-        buffer_insert_line(buf, row, col, &c);
+        buffer_insert_line(buf, row, col, "\n");
+        buffer_insert_char(buf, row, col, c);
         return;
     } else if ((strlen(line) + 2) * sizeof(char) >= sizeof(*line)) {
         buffer_expand_line(buf, line, row, col, c);
