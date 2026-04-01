@@ -3,6 +3,7 @@
 //
 
 #include "fileio.h"
+#include "stdlib.h"
 #include "../editor/editor.h"
 
 
@@ -16,6 +17,8 @@ void file_open(Editor *editor, const char *filename, int format){
 
   if (fp == NULL) {
         perror("Error opening file");
+      //  free(line);
+       // free(fp);
         return ;
     }
   while ((read = getline(&line, &len, fp)) != -1) {
@@ -26,11 +29,12 @@ void file_open(Editor *editor, const char *filename, int format){
 	editor_move_cursor(editor, 0, 0);
 
     if (line) {
-       // free(line);
+        free(line);
     }
 
 
   fclose(fp);
+ // free(fp);
 
   }
 
@@ -49,7 +53,7 @@ void file_save_as(Editor *editor, const char *filename,int format){
     char *line = buffer_get_line(buffer, i);
     if (line)
         fputs(line,fp);
- //   format?fprintf(fp,"%s",line):
-  }
+ }
+
   fclose(fp);
 }

@@ -186,11 +186,17 @@ char *buffer_get_line(Buffer *buf, int index) {
 }
 
 
-void buffer_free(Buffer *buffer) {
-    for (int i = 0; i < buffer->line_count - 1; i++) {
-        if (buffer->lines[i] != NULL)
-            free(buffer->lines[i]);
+void buffer_free(Buffer *buf) {
+
+    if (!buf) return;
+
+    for (size_t i = 0; i < buf->line_count; i++) {
+        free(buf->lines[i]);
     }
-    if (buffer->lines != NULL)
-        free(buffer->lines);
+
+    free(buf->lines);
+
+    buf->lines = NULL;
+    buf->line_count = 0;
+    buf->capacity = 0;
 }

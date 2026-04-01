@@ -23,15 +23,19 @@ void editor_init(Editor *editor) {
     editor->buffer = calloc(1, sizeof(Buffer));
     buffer_init(editor->buffer);
 
-    // editor_insert_line(editor);//PLACE FIRST LINE
-    editor_open_file(editor, "example.txt");
+//    editor_open_file(editor, "src/buffer/buffer.c");
+        editor_open_file(editor, "test.c");
+
 }
 
 void editor_shutdown(Editor *editor) {
     //TODO-free buffer?
     file_save_as(editor, "SpaddTxTOUT.txt", 1); //HARDCODED OUTPUT
     editor->running = 0;
-    //  buffer_free(editor->buffer);
+    buffer_free(editor->buffer);
+  //    buffer_free(editor->buffer);
+    if (editor->buffer)
+        free(editor->buffer);
 }
 
 void editor_open_file(Editor *editor, const char *filename) {
