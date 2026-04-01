@@ -12,6 +12,7 @@ void initScreen(Editor *editor) {
 }
 
 void screen_render(Editor *editor) {
+    //TODO-handle issues with scrolling
     clear();
     editor_scroll(editor);
 
@@ -31,6 +32,14 @@ void editor_scroll(Editor *editor) {
 
     if (editor->cursor_x >= editor->x_offset + editor->screen_x)
         editor->x_offset = editor->cursor_x - editor->screen_x + 1;
+
+
+
+    if (editor->cursor_y < editor->y_offset)
+        editor->y_offset = editor->cursor_y;
+
+    if (editor->cursor_y >= editor->y_offset + editor->screen_y)
+        editor->y_offset = editor->cursor_y - editor->screen_y +1;
 }
 
 void screen_draw_rows(Editor *editor) {

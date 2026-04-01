@@ -96,20 +96,22 @@ void editor_move_cursor(Editor *editor, int x, int y) {
         editor->cursor_y = y;
         return;
     }
-    if (x >= strlen(targetLine)) {                          //IF X IS PAST END OF LINE, WRAP TO START OF NEXT LINE IF THERE IS ONE
+                            //IF X IS PAST END OF LINE, WRAP TO START OF NEXT LINE IF THERE IS ONE
+        if (x >= strlen(targetLine)) {                          //IF X IS PAST END OF LINE, WRAP TO START OF NEXT LINE IF THERE IS ONE
 
 
-        if (targetLine == currentLine) {
-            if (!buffer_get_line(editor->buffer, y + 1))return;
-            editor->cursor_x = 0;
-            editor->cursor_y = y + 1;
-        } else {                                            //GO TO MAX LINE LENGTH UPON VERTICAL MOVE PAST END OF LINE
-            editor->cursor_x = strlen(targetLine) - 1;
-            editor->cursor_y = y;
+            if (targetLine == currentLine) {
+                if (!buffer_get_line(editor->buffer, y + 1))return;
+                editor->cursor_x = 0;
+                editor->cursor_y = y + 1;
+            } else {                                            //GO TO MAX LINE LENGTH UPON VERTICAL MOVE PAST END OF LINE
+                editor->cursor_x = strlen(targetLine) - 1;
+                editor->cursor_y = y;
+            }
+            return;
         }
-        return;
+
+        editor->cursor_x = x;
+        editor->cursor_y = y;
     }
 
-    editor->cursor_x = x;
-    editor->cursor_y = y;
-}
