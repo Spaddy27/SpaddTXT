@@ -13,13 +13,13 @@ int main(void) {
     setlocale(LC_ALL, "");
     initscr();
     //	cbreak();               /* Disable line buffering */
-    noecho();                   /* Don't echo() while we do getch */
-    keypad(stdscr, TRUE);       /* Enable function keys like F1, arrow keys, etc. */
-    scrollok(stdscr, TRUE);     //ENABLE BOTTOM OF WINDOW SCROLL
+    noecho(); /* Don't echo() while we do getch */
+    keypad(stdscr, TRUE); /* Enable function keys like F1, arrow keys, etc. */
+    scrollok(stdscr, TRUE); //ENABLE BOTTOM OF WINDOW SCROLL
     //Create Components
     Editor editor;
-    Input in;
-    Screen screen;
+    //  Input in;
+    //   Screen screen;
 
     //Initialize the editor
     editor_init(&editor);
@@ -30,18 +30,12 @@ int main(void) {
     while (editor.running) {
         int key = getch();
         input_handle_key(&editor, key);
-
-        screen_render(&editor);
+        if (editor.running)
+            screen_render(&editor);
     }
-
-    //TEMP TO SHOW QUIT
-    printw("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nQUITTING");
-    refresh();
-    getch();
 
 
     endwin(); /* End curses mode and restore terminal */
-
+   // delwin();
     return 0;
 }
-

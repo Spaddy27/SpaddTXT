@@ -11,19 +11,22 @@ A tui text editor written in C using ncurses.
 - Character insertion/deletion
 - Horizontal scrolling for long lines
 - Arrow key navigation
-- Line insertion
+- Line insertion/deletion
 - File opening/saving
 
 ## Planned Features
 
-- Line deletion
 - Keyboard shortcuts
 - Clipboard
 - Search functionality
 - Undo/redo system
 
+
 ## Next Commit Goals
+
 - Select file to open or save to
+- Handle different file formats(ex. DOS)
+- Fix scrolling issues
 
 ## Build
 
@@ -40,6 +43,11 @@ make
 Run:
 
 ./SpaddTxT
+
+## Commands
+
+Quit: CTRL+E
+
 
 ## Goals of This Project
 

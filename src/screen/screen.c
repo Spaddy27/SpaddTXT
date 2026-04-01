@@ -26,7 +26,6 @@ void screen_render(Editor *editor) {
 }
 
 void editor_scroll(Editor *editor) {
-
     if (editor->cursor_x < editor->x_offset)
         editor->x_offset = editor->cursor_x;
 
