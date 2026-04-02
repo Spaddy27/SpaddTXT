@@ -2,7 +2,7 @@
 // Created by mspad on 3/24/2026.
 //
 #include "../buffer/buffer.h"
-
+#include <ncurses.h>
 
 
 
@@ -25,6 +25,8 @@ typedef struct {
 
     int running;
 
+   // WINDOW *window;
+//TEST
     Buffer *buffer;
 
 } Editor;

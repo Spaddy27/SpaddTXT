@@ -24,10 +24,9 @@ void editor_init(Editor *editor) {
     buffer_init(editor->buffer);
 
 //    editor_open_file(editor, "src/buffer/buffer.c");
-        editor_open_file(editor, "test.c");
+         editor_open_file(editor, "test.c");
 
 }
-
 void editor_shutdown(Editor *editor) {
     //TODO-free buffer?
     file_save_as(editor, "SpaddTxTOUT.txt", 1); //HARDCODED OUTPUT
