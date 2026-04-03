@@ -5,25 +5,28 @@
 #include "screen.h"
 #include <string.h>
 #include <ncurses.h>
+//TILE- an editor, a window, its size, and its position
+//WINDOW_MANAGER- a collection of windows and their positions, add or delete tiles, move + organize tiles
 
 void initScreen(Editor *editor) {
-    getmaxyx(stdscr, editor->screen_y, editor->screen_x);
+    getmaxyx(editor->window, editor->screen_y, editor->screen_x);
     screen_render(editor);
 }
 
 void screen_render(Editor *editor) {
     //TODO-handle issues with scrolling
-    clear();
+  //  clear();
     editor_scroll(editor);
 
     screen_draw_rows(editor);
 
-    move(
+    wmove(
+        editor->window,
         editor->cursor_y - editor->y_offset,
         editor->cursor_x - editor->x_offset
     );
 
-    refresh();
+    wrefresh(editor->window);
 }
 
 void editor_scroll(Editor *editor) {
@@ -46,8 +49,8 @@ void screen_draw_rows(Editor *editor) {
     for (int y = 0; y < editor->screen_y; y++) {
         int file_row = y + editor->y_offset;
 
-        move(y, 0);
-        clrtoeol();
+        wmove(editor->window, y, 0);
+       // clrtoeol();
 
         if (file_row >= editor->buffer->line_count)
             continue;
@@ -63,7 +66,8 @@ void screen_draw_rows(Editor *editor) {
             if (visible_len > editor->screen_x)
                 visible_len = editor->screen_x;
 
-            mvaddnstr(y, 0, visible, visible_len);
+            mvwprintw(editor->window, y, 0, visible, visible_len);
+         //   wmvwprintw(editor->window, y, visible_len, ""); //CLEAR REST OF LINE
         }
     }
 }

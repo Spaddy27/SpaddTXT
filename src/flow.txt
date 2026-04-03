@@ -1,0 +1,130 @@
+digraph cflow {
+    node [shape="box"]
+    editor_delete_line [label="void editor_delete_line (Editor *editor)
+editor/editor.c:79"]
+    editor_init [label="void editor_init (Editor *editor)
+editor/editor.c:12"]
+    editor_init -> calloc
+    editor_init -> buffer_init
+    editor_init -> editor_open_file
+    calloc [label="calloc()"]
+    buffer_init [label="void buffer_init (Buffer *buffer)
+buffer/buffer.c:9"]
+    buffer_init -> calloc
+    editor_open_file [label="void editor_open_file (Editor *editor, const char *filename)
+editor/editor.c:41"]
+    editor_open_file -> file_open
+    file_open [label="void file_open (Editor *editor, const char *filename, int format)
+file/fileio.c:10"]
+    file_open -> fopen
+    file_open -> perror
+    file_open -> getline
+    file_open -> editor_insert_line
+    file_open -> editor_move_cursor
+    file_open -> free
+    file_open -> fclose
+    fopen [label="fopen()"]
+    perror [label="perror()"]
+    getline [label="getline()"]
+    editor_insert_line [label="void editor_insert_line (Editor *editor, const char *line)
+editor/editor.c:73"]
+    editor_insert_line -> buffer_insert_line
+    buffer_insert_line [label="void buffer_insert_line (Buffer *buf, int row, int col, const char *text)
+buffer/buffer.c:48"]
+    buffer_insert_line -> buffer_expand
+    buffer_insert_line -> buffer_get_line
+    buffer_insert_line -> strlen
+    buffer_insert_line -> free
+    buffer_insert_line -> calloc
+    buffer_insert_line -> memcpy
+    buffer_insert_line -> memmove
+    buffer_insert_line -> memset
+    buffer_expand [label="void buffer_expand (Buffer *buf)
+buffer/buffer.c:16"]
+    buffer_expand -> realloc
+    realloc [label="realloc()"]
+    buffer_get_line [label="char *buffer_get_line (Buffer *buf, int index)
+buffer/buffer.c:183"]
+    strlen [label="strlen()"]
+    free [label="free()"]
+    memcpy [label="memcpy()"]
+    memmove [label="memmove()"]
+    memset [label="memset()"]
+    editor_move_cursor [label="void editor_move_cursor (Editor *editor, int x, int y)
+editor/editor.c:82"]
+    editor_move_cursor -> buffer_get_line
+    editor_move_cursor -> strlen
+    fclose [label="fclose()"]
+    file_save [label="void file_save (Editor *editor, int format)
+file/fileio.c:41"]
+    initScreen [label="void initScreen (Editor *editor)
+screen/screen.c:9"]
+    initScreen -> getmaxyx
+    initScreen -> screen_render
+    getmaxyx [label="getmaxyx()"]
+    screen_render [label="void screen_render (Editor *editor)
+screen/screen.c:14"]
+    screen_render -> clear
+    screen_render -> editor_scroll
+    screen_render -> screen_draw_rows
+    screen_render -> move
+    screen_render -> refresh
+    clear [label="clear()"]
+    editor_scroll [label="void editor_scroll (Editor *editor)
+screen/screen.c:29"]
+    screen_draw_rows [label="void screen_draw_rows (Editor *editor)
+screen/screen.c:37"]
+    move [label="move()"]
+    refresh [label="refresh()"]
+    input_handle_key [label="void input_handle_key (Editor *editor, int key)
+input/input.c:9"]
+    input_handle_key -> CTRL
+    input_handle_key -> editor_shutdown
+    input_handle_key -> editor_insert_line
+    input_handle_key -> editor_delete_char
+    input_handle_key -> editor_move_cursor
+    input_handle_key -> editor_insert_char
+    CTRL [label="CTRL()"]
+    editor_shutdown [label="void editor_shutdown (Editor *editor)
+editor/editor.c:31"]
+    editor_shutdown -> file_save_as
+    editor_shutdown -> buffer_free
+    editor_shutdown -> free
+    file_save_as [label="void file_save_as (Editor *editor, const char *filename, int format)
+file/fileio.c:44"]
+    file_save_as -> fopen
+    file_save_as -> fclose
+    buffer_free [label="void buffer_free (Buffer *buf)
+buffer/buffer.c:189"]
+    buffer_free -> free
+    editor_delete_char [label="void editor_delete_char (Editor *editor)
+editor/editor.c:51"]
+    editor_delete_char -> strlen
+    editor_delete_char -> buffer_get_line
+    editor_delete_char -> buffer_delete_char
+    buffer_delete_char [label="void buffer_delete_char (Buffer *buf, int row, int col)
+buffer/buffer.c:124"]
+    buffer_delete_char -> buffer_get_line
+    buffer_delete_char -> strlen
+    buffer_delete_char -> free
+    buffer_delete_char -> calloc
+    buffer_delete_char -> memcpy
+    buffer_delete_char -> memmove
+    editor_insert_char [label="void editor_insert_char (Editor *editor, char c)
+editor/editor.c:46"]
+    editor_insert_char -> buffer_insert_char
+    buffer_insert_char [label="void buffer_insert_char (Buffer *buf, int row, int col, char c)
+buffer/buffer.c:164"]
+    buffer_insert_char -> buffer_get_line
+    buffer_insert_char -> buffer_insert_line
+    buffer_insert_char -> strlen
+    buffer_insert_char -> buffer_expand_line
+    buffer_insert_char -> memmove
+    buffer_expand_line [label="void buffer_expand_line (Buffer *buf, char *line, int row, int col, char c)
+buffer/buffer.c:28"]
+    buffer_expand_line -> strlen
+    buffer_expand_line -> realloc
+    buffer_expand_line -> memset
+    buffer_expand_line -> memmove
+    buffer_expand_line -> free
+}

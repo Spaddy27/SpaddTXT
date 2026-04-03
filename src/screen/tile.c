@@ -9,11 +9,11 @@
 //TILE- an editor, a window, its size, and its position
 //WINDOW_MANAGER- a collection of windows and their positions, add or delete tiles, move + organize tiles
 
-void init_tile(Tile *tile, int height, int width, int y, int x) {
-   tile=calloc(1, sizeof(Tile));
-   tile->window=calloc(1, sizeof(WINDOW));
+Tile * init_tile( int height, int width, int y, int x) {
 
-    tile->editor = calloc(1, sizeof(Editor));
+    Tile *tile=calloc(1, sizeof(Tile));
+    
+    tile->editor=calloc(1, sizeof(Editor));
      editor_init(tile->editor);
     
     tile->width = width;
@@ -29,17 +29,21 @@ void init_tile(Tile *tile, int height, int width, int y, int x) {
     tile->window = newwin(tile->height, tile->width, tile->y, tile->x);
      box(tile->window, 0, 0);
      mvwprintw(tile->window, 0, 2, "Tile");
- 
+    keypad(tile->window, TRUE);
   
      tile_render(tile);
-     int key = wgetch(tile->window);
+   //  int key = wgetch(tile->window);
+     return tile;
+     //GE
+  //    int key = wgetch(tile->window);
 }
+
 
 
 void tile_render(Tile *tile) {
     //TODO-handle issues with scrolling
     Editor *editor = tile->editor;
-  //  clear();
+   // wclear(tile->window);
     _scroll(editor);
 
     tile_draw_rows(tile);
@@ -74,8 +78,9 @@ void tile_draw_rows(Tile *tile) {
     for (int y = 0; y < editor->screen_y; y++) {
         int file_row = y + editor->y_offset;
 
-       wmove(tile->window, y+1, 1);
-     
+      // wmove(tile->window, y+1, 1);
+    //   wclrtoeol(tile->window);
+     mvwhline(tile->window, y + 1, 1, ' ', editor->screen_x);
         if (file_row >= editor->buffer->line_count)
             continue;
 

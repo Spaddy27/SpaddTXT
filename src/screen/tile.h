@@ -14,7 +14,7 @@ typedef struct {
 
 }Tile;
 
-//void init_tile(Tile *tile, int width, int height, int x, int y);
+Tile *init_tile( int width, int height, int x, int y);
 
 //void tile_render(Tile *tile, Editor *editor);
 
