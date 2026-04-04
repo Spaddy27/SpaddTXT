@@ -11,10 +11,11 @@ typedef struct {
     int height;
     int x;
     int y;
+    char *title;  
 
 }Tile;
 
-Tile *init_tile( int width, int height, int x, int y);
+Tile *init_tile( int width, int height, int x, int y, const char *title);
 
 Editor *get_tile_editor(Tile *tile);
 WINDOW *get_tile_window(Tile *tile);

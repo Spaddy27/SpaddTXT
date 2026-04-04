@@ -12,13 +12,7 @@ void init_window_manager(Window_manager *wm) {
     wm->tiles = tiles;
 
 
-    newTile(wm, wm->screen_y, wm->screen_x, 0, 0);
-
-   // (wm->tiles)[0]= init_tile( wm->screen_y, wm->screen_x, 0, 0);
-   // wm->active_tile = (wm->tiles)[0];
-
- 
-  
+    newTile(wm, wm->screen_y, wm->screen_x, 0, 0, "untitled");
 }
 
 WINDOW *getActiveTileWindow(Window_manager *wm) {
@@ -42,18 +36,18 @@ void resizeTile(Window_manager *wm, int index, int new_height, int new_width) {
  
    
     box(tile->window, 0, 0);
-    mvwprintw(tile->window, 0, 2, "Tile");
+    mvwprintw(tile->window, 0, 2, tile->title);
 
   
 
 }
 
-void newTile(Window_manager *wm, int height, int width, int starty, int startx) {
+void newTile(Window_manager *wm, int height, int width, int starty, int startx, const char *title) {
     if (wm->window_count >= 5) {
         //TODO-handle max window count
         return;
     }
-    Tile *tile = init_tile(height, width, starty, startx);
+    Tile *tile = init_tile(height, width, starty, startx, title);
     wm->tiles[wm->window_count] = tile;
     wm->active_tile = tile;
     wm->window_count++;

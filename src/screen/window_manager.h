@@ -18,7 +18,7 @@ int running;
 }Window_manager;
 WINDOW *getActiveTileWindow(Window_manager *wm);
 Editor *getActiveTileEditor(Window_manager *wm);
-void newTile(Window_manager *wm, int height, int width, int starty, int startx);
+void newTile(Window_manager *wm, int height, int width, int starty, int startx, const char *title);
 
 void resizeTile(Window_manager *wm, int index, int new_height, int new_width);
 

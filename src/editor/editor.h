@@ -25,6 +25,8 @@ typedef struct {
 
     int running;
 
+    char *filename;
+
    // WINDOW *window;
 //TEST
     Buffer *buffer;

@@ -47,7 +47,7 @@ void file_save_as(Editor *editor, const char *filename,int format){
 
 
   //if (!fp) {}
-  for( int i = 0; i < buffer->capacity ; i++) {
+  for( int i = 0; i < buffer->line_count ; i++) {
     char *line = buffer_get_line(buffer, i);
     if (line)
         fputs(line,fp);

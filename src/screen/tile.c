@@ -9,7 +9,7 @@
 //TILE- an editor, a window, its size, and its position
 //WINDOW_MANAGER- a collection of windows and their positions, add or delete tiles, move + organize tiles
 
-Tile * init_tile( int height, int width, int y, int x) {
+Tile * init_tile( int height, int width, int y, int x, const char *title) {
 
     noecho(); /* Don't echo() while we do getch */
     cbreak(); /* Line buffering disabled, Pass on everty thing to me */
@@ -20,17 +20,31 @@ Tile * init_tile( int height, int width, int y, int x) {
     tile->height = height;
     tile->x = x;
     tile->y = y;
+    tile->title = calloc(31, sizeof(char)); //GIVE MAX TITLE LENGTH OF 30 + NULL TERMINATOR
+    
     
 //EDITOR   
     tile->editor=calloc(1, sizeof(Editor));
     editor_init(tile->editor);
     tile->editor->screen_x = width-2;   //ACCOUNT FOR// 
     tile->editor->screen_y = height-2;      //BORDER//
+
+//IF THE EDITOR HAS A FILE, MAKE FILE NAME THE TITLE, OTHERWISE DEFAULT TO UNTITLED
+if(tile->editor->filename) {
+    if(strlen(tile->editor->filename)>30) {//ONLY COPY FIRST 30 CHARACTERS IF TITLE TOO LONG
+        strncpy(tile->title, tile->editor->filename, 30);
+        tile->title[30] = '\0'; //ENSURE NULL TERMINATION
+    }
+    else
+    strcpy(tile->title, tile->editor->filename);
+}
+
+
   
 //WINDOW
     tile->window = newwin(tile->height, tile->width, tile->y, tile->x);
     box(tile->window, 0, 0);
-    mvwprintw(tile->window, 0, 2, "Tile");
+    mvwprintw(tile->window, 0, 2, tile->title);
     keypad(tile->window, TRUE);
   
     

@@ -22,9 +22,10 @@ void editor_init(Editor *editor) {
 
     editor->buffer = calloc(1, sizeof(Buffer));
     buffer_init(editor->buffer);
+    editor->filename = "untitled";//default filename until one is opened or saved as
 
 //    editor_open_file(editor, "src/buffer/buffer.c");
-         editor_open_file(editor, "test.c");
+  //       editor_open_file(editor, "test.c");
 
 }
 void editor_shutdown(Editor *editor) {
@@ -37,6 +38,7 @@ void editor_shutdown(Editor *editor) {
 }
 
 void editor_open_file(Editor *editor, const char *filename) {
+    editor->filename = strdup(filename);
     file_open(editor, filename, 1);
 }
 
