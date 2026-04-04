@@ -18,19 +18,18 @@ void editor_init(Editor *editor) {
     editor->x_offset = 0;
 
     editor->running = 1;
+    editor->changed = 0;
 
 
     editor->buffer = calloc(1, sizeof(Buffer));
     buffer_init(editor->buffer);
     editor->filename = "untitled";//default filename until one is opened or saved as
 
-//    editor_open_file(editor, "src/buffer/buffer.c");
-  //       editor_open_file(editor, "test.c");
-
 }
 void editor_shutdown(Editor *editor) {
     //TODO-free buffer?
-    file_save_as(editor, "SpaddTxTOUT.txt", 1); //HARDCODED OUTPUT
+    //TODO- if has file, prompt to save changes or save as
+    //file_save_as(editor, "SpaddTxTOUT.txt", 1); //HARDCODED OUTPUT
     editor->running = 0;
     buffer_free(editor->buffer);
     if (editor->buffer)
@@ -38,18 +37,25 @@ void editor_shutdown(Editor *editor) {
 }
 
 void editor_open_file(Editor *editor, const char *filename) {
-    //TODO- if has file, prompt to save changes or open in new tile
+   
+
     editor->filename = strdup(filename);
     file_open(editor, filename, 1);
+   
+
 }
 
 
 void editor_insert_char(Editor *editor, char c) {
+        editor->changed = 1;
+
     buffer_insert_char(editor->buffer, editor->cursor_y, editor->cursor_x, c);
     editor->cursor_x++;
 }
 
 void editor_delete_char(Editor *editor) {
+        editor->changed = 1;
+
     size_t origLen = strlen(buffer_get_line(editor->buffer, editor->cursor_y));
     buffer_delete_char(editor->buffer, editor->cursor_y, editor->cursor_x);
     editor->cursor_x--;

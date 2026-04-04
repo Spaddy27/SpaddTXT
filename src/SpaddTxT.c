@@ -3,16 +3,17 @@
 
 #include "editor/editor.h"
 #include "input/input.h"
-#include "screen/screen.h"
+//#include "screen/screen.h"
 #include "screen/window_manager.h"
 #include "screen/tile.h"
 #include <stdio.h>
 
 
-int main(void) {
+int main(int argc, char *argv[]) {
     //INTITIALIZATION FOR NCURSES
     setlocale(LC_ALL, "");
     initscr();
+    raw(); 
     noecho(); /* Don't echo() while we do getch */
     cbreak(); /* Line buffering disabled, Pass on everty thing to me */
     keypad(stdscr, TRUE); /* Enable function keys like F1, arrow keys, etc. */
@@ -29,6 +30,14 @@ int main(void) {
     active_editor=getActiveTileEditor(&wm);
      active_window=getActiveTileWindow(&wm);
      active_tile=wm.active_tile;
+
+//HANDLE ARGUMENTS TO OPEN FILES IN NEW TILES
+    for(int i=1; i<argc; i++) {
+        char *filename=argv[i];
+        editor_open_file(active_editor, filename);
+        set_tile_title(active_tile, filename);
+        tile_render(active_tile);
+    }     
    
 
     //TODO-handle changing windows and active tiles
@@ -40,8 +49,7 @@ int main(void) {
             break;
         }
          //TODO-resize active tile, not just first tile
-         if(ch=='r')  //TEST- RESIZE TILE ON R KEY
-          resizeTile(&wm, 0, 20, 20);
+        
         
        
         tile_render(active_tile);

@@ -54,20 +54,9 @@ void newTile(Window_manager *wm, int height, int width, int starty, int startx, 
   }
 
 char* popUpWindow(Window_manager *wm, int height, int width, int starty, int startx, const char *title) {
-//     //TODO-create a new temporary window
+
      WINDOW *popup = newwin(height, width, starty, startx);
-//     box(popup, 0, 0);
-//     mvwprintw(popup, 0, 2, title);
-//     wrefresh(popup);
-//     //Create input buffer
-//     char input[256];
-//     //Get user input
-//  //   wmvwgetnstr(popup, input, 255);
-//     mvwgetnstr(popup,1, 0, input, 255);
-//     //Destroy the popup window
-//     delwin(popup);
-//     //Return the user input
-//     return strdup(input);
+
 box(popup, 0, 0);
 mvwprintw(popup, 0, 2, title);
 wmove(popup, 1, 1);

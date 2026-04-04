@@ -16,7 +16,7 @@
 
 
 
-void file_open(Editor *editor, const char *filename, int format);
+int file_open(Editor *editor, const char *filename, int format);
 
 void file_save(Editor *editor,int format);
 

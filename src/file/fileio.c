@@ -7,7 +7,7 @@
 #include "../editor/editor.h"
 
 
-void file_open(Editor *editor, const char *filename, int format){
+int file_open(Editor *editor, const char *filename, int format){
 
   char *line = NULL; // Initialize line pointer to NULL for automatic allocation
     size_t len = 0;    // Initialize size to 0
@@ -17,7 +17,7 @@ void file_open(Editor *editor, const char *filename, int format){
 
   if (fp == NULL) {
         perror("Error opening file");
-        return ;
+        return 1;
     }
 
   while ((read = getline(&line, &len, fp)) != -1) {
@@ -33,6 +33,7 @@ void file_open(Editor *editor, const char *filename, int format){
 
 
   fclose(fp);
+  return 0;
 
   }
 
