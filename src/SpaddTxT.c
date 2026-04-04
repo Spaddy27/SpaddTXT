@@ -22,25 +22,29 @@ int main(void) {
     Window_manager wm;
     WINDOW *active_window=NULL;
     Tile *active_tile=NULL;
-    Editor *editor=NULL;
+    Editor *active_editor=NULL;
 
     init_window_manager(&wm);
-    active_tile=wm.active_tile;
-    active_window=active_tile->window;
-    editor=active_tile->editor;
-
     
-    while(wm.running) {
+    active_editor=getActiveTileEditor(&wm);
+     active_window=getActiveTileWindow(&wm);
+     active_tile=wm.active_tile;
+   
+
+    //TODO-handle changing windows and active tiles
+    //TODO-handle when editor is closed, close tile, and if no tiles left, close window and exit program
+    while(active_editor->running) { //CURRENTLY ONLY ONE TILE, SO THIS IS EFFECTIVELY THE MAIN LOOP
         int ch=wgetch(active_window);
-        input_handle_key(editor, ch);
-    //    screen_render(active_tile->editor);
+        input_handle_key(active_editor, ch);
+        if(active_editor->running==0) {     //CHECK TO ENSURE STILL RUNNING AFTER INPUT
+            break;
+        }
         tile_render(active_tile);
-       // ch=wgetch(active_window);
     }
           
-    
 
 
+    shutdown_window_manager(&wm);
 
     endwin(); /* End curses mode and restore terminal */
    // delwin();

@@ -11,16 +11,15 @@ void file_open(Editor *editor, const char *filename, int format){
 
   char *line = NULL; // Initialize line pointer to NULL for automatic allocation
     size_t len = 0;    // Initialize size to 0
-    ssize_t read;      // Variable to store the number of characters read
+    size_t read;      // Variable to store the number of characters read
 
   FILE *fp = fopen(filename, "r");
 
   if (fp == NULL) {
         perror("Error opening file");
-      //  free(line);
-       // free(fp);
         return ;
     }
+
   while ((read = getline(&line, &len, fp)) != -1) {
         editor_insert_line(editor, line);
 
@@ -34,7 +33,6 @@ void file_open(Editor *editor, const char *filename, int format){
 
 
   fclose(fp);
- // free(fp);
 
   }
 

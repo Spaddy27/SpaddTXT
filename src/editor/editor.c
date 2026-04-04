@@ -32,7 +32,6 @@ void editor_shutdown(Editor *editor) {
     file_save_as(editor, "SpaddTxTOUT.txt", 1); //HARDCODED OUTPUT
     editor->running = 0;
     buffer_free(editor->buffer);
-  //    buffer_free(editor->buffer);
     if (editor->buffer)
         free(editor->buffer);
 }
@@ -95,7 +94,7 @@ void editor_move_cursor(Editor *editor, int x, int y) {
         editor->cursor_y = y;
         return;
     }
-                            //IF X IS PAST END OF LINE, WRAP TO START OF NEXT LINE IF THERE IS ONE
+                                                            //IF X IS PAST END OF LINE, WRAP TO START OF NEXT LINE IF THERE IS ONE
         if (x >= strlen(targetLine)) {                          //IF X IS PAST END OF LINE, WRAP TO START OF NEXT LINE IF THERE IS ONE
 
 

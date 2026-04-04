@@ -14,6 +14,9 @@ BUILD_DIR = build
 # Find all source files
 SRCS = $(shell find $(SRC_DIR) -name "*.c")
 
+
+SRCS := $(filter-out screen.c, $(SRCS))
+
 # Convert source files to object files in build directory
 OBJS = $(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.o,$(SRCS))
 

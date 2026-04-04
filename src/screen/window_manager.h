@@ -7,21 +7,23 @@
 #define WINDOW_MANAGER_H
 
 typedef struct{
-Tile *tiles[5];
+  //  struct Student *students = malloc(n * sizeof(struct Student));
+  Tile **tiles; //dynamic array of tiles
+
 Tile *active_tile;
 int window_count;
 int screen_x;
 int screen_y;
 int running;
 }Window_manager;
+WINDOW *getActiveTileWindow(Window_manager *wm);
+Editor *getActiveTileEditor(Window_manager *wm);
+void new_window(Window_manager *wm, int height, int width, int starty, int startx);
 
-//void init_window_manager(Window_manager *wm);
-//WINDOW *add_window(Window_manager *wm, int height, int width, int starty, int startx);
+void resizeTile(Window_manager *wm, int index, int new_height, int new_width);
 
-//void resize_tile(Window_manager *wm, int index, int new_height, int new_width);
+void move_tile(Window_manager *wm, int index, int new_starty, int new_startx);
 
-//void move_tile(Window_manager *wm, int index, int new_starty, int new_startx);
-
-//void pair_tile(WINDOW *window,Tile *tile);
+void shutdown_window_manager(Window_manager *wm);
 
 #endif //SCREEN_H

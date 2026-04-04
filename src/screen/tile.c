@@ -11,39 +11,50 @@
 
 Tile * init_tile( int height, int width, int y, int x) {
 
+    noecho(); /* Don't echo() while we do getch */
+    cbreak(); /* Line buffering disabled, Pass on everty thing to me */
+
+//TILE
     Tile *tile=calloc(1, sizeof(Tile));
-    
-    tile->editor=calloc(1, sizeof(Editor));
-     editor_init(tile->editor);
-    
     tile->width = width;
-    
     tile->height = height;
     tile->x = x;
     tile->y = y;
-
-    tile->editor->screen_x = width-2;//ACCOUNT FOR BORDER
-    tile->editor->screen_y = height-2;
+    
+//EDITOR   
+    tile->editor=calloc(1, sizeof(Editor));
+    editor_init(tile->editor);
+    tile->editor->screen_x = width-2;   //ACCOUNT FOR// 
+    tile->editor->screen_y = height-2;      //BORDER//
   
-
+//WINDOW
     tile->window = newwin(tile->height, tile->width, tile->y, tile->x);
-     box(tile->window, 0, 0);
-     mvwprintw(tile->window, 0, 2, "Tile");
+    box(tile->window, 0, 0);
+    mvwprintw(tile->window, 0, 2, "Tile");
     keypad(tile->window, TRUE);
   
-     tile_render(tile);
-   //  int key = wgetch(tile->window);
+    
+    
+    tile_render(tile);
+   
      return tile;
-     //GE
-  //    int key = wgetch(tile->window);
+     
+}
+
+WINDOW *get_tile_window(Tile *tile) {
+    return tile->window;
+}
+Editor *get_tile_editor(Tile *tile) {
+    return tile->editor;
 }
 
 
-
 void tile_render(Tile *tile) {
-    //TODO-handle issues with scrolling
+   
     Editor *editor = tile->editor;
-   // wclear(tile->window);
+    if (!editor)
+        return;
+   
     _scroll(editor);
 
     tile_draw_rows(tile);
