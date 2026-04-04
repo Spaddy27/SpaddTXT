@@ -18,11 +18,11 @@ int running;
 }Window_manager;
 WINDOW *getActiveTileWindow(Window_manager *wm);
 Editor *getActiveTileEditor(Window_manager *wm);
-void new_window(Window_manager *wm, int height, int width, int starty, int startx);
+void newTile(Window_manager *wm, int height, int width, int starty, int startx);
 
 void resizeTile(Window_manager *wm, int index, int new_height, int new_width);
 
-void move_tile(Window_manager *wm, int index, int new_starty, int new_startx);
+void moveTile(Window_manager *wm, int index, int new_starty, int new_startx);
 
 void shutdown_window_manager(Window_manager *wm);
 

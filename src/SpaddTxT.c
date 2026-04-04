@@ -39,10 +39,15 @@ int main(void) {
         if(active_editor->running==0) {     //CHECK TO ENSURE STILL RUNNING AFTER INPUT
             break;
         }
+         //TODO-resize active tile, not just first tile
+         if(ch=='r')  //TEST- RESIZE TILE ON R KEY
+          resizeTile(&wm, 0, 20, 20);
+        
+       
         tile_render(active_tile);
+  //  wrefresh(active_window);
     }
-          
-
+        
 
     shutdown_window_manager(&wm);
 
