@@ -4,16 +4,21 @@
 #include "input.h"
 #include "../editor/editor.h"
 
-#include "../screen/screen.h"
+//#include "../screen/screen.h"
 
-void input_handle_key(Editor *editor, int key) {
+void input_handle_key(Editor *editor, Window_manager *wm, int key) {
     //TODO-HANDLE TABS and  CTRL + char
     switch (key) {
         case CTRL('e'):
             editor_shutdown(editor);
             break;
         case CTRL('o'):
-            editor_shutdown(editor);
+        //CREATE POPUP TILE TO OPEN FILE
+            char *tmp=popUpWindow(wm, 3, 30, 5, 5, "Open File:");
+            editor_open_file(editor, tmp);
+            //CHANGE TITLE OF TILE TO FILE NAME
+            set_tile_title(wm->active_tile, tmp);
+           // editor_shutdown(editor);
             break;
         case '\n':
             editor_insert_line(editor, "\n");

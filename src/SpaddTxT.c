@@ -35,7 +35,7 @@ int main(void) {
     //TODO-handle when editor is closed, close tile, and if no tiles left, close window and exit program
     while(active_editor->running) { //CURRENTLY ONLY ONE TILE, SO THIS IS EFFECTIVELY THE MAIN LOOP
         int ch=wgetch(active_window);
-        input_handle_key(active_editor, ch);
+        input_handle_key(active_editor, &wm,ch);
         if(active_editor->running==0) {     //CHECK TO ENSURE STILL RUNNING AFTER INPUT
             break;
         }

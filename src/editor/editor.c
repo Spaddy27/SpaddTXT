@@ -38,6 +38,7 @@ void editor_shutdown(Editor *editor) {
 }
 
 void editor_open_file(Editor *editor, const char *filename) {
+    //TODO- if has file, prompt to save changes or open in new tile
     editor->filename = strdup(filename);
     file_open(editor, filename, 1);
 }
