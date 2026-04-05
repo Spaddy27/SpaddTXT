@@ -13,5 +13,5 @@ typedef struct {
 
 void input_handle_key(Editor *editor, Window_manager *wm, int key);
 
-
+void prompt_save_changes(Editor *editor, Window_manager *wm);
 #endif //INPUT_H

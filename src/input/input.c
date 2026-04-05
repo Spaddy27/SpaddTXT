@@ -16,17 +16,21 @@ void input_handle_key(Editor *editor, Window_manager *wm, int key) {
             break;
         case CTRL('s'):
             tmp=popUpWindow(wm, 3, 30, 5, 5, "Save To:");//TODO-add known file name to input window
-            file_save_as(editor, tmp, 1);
+            editor_save_file(editor, tmp);
+            //file_save_as(editor, tmp, 1);
+            set_tile_title(wm->active_tile, tmp);       //UPDATE TILE TITLE TO FILE NAME
+            editor->changed=0; //RESET CHANGED FLAG AFTER SAVING
+            
             break;
         case CTRL('o'):
-        //IF EDITOR HAS CHANGES, PROMPT TO SAVE BEFORE OPENING NEW FILE
-           prompt_save_changes(editor, wm);
+            //IF EDITOR HAS CHANGES, PROMPT TO SAVE BEFORE OPENING NEW FILE
+            prompt_save_changes(editor, wm);
 
             //RESET THE EDITOR BEFORE OPENING NEW FILE
             editor_shutdown(editor);
             editor_init(editor);
-            
-        //CREATE POPUP TILE TO OPEN FILE
+
+            //CREATE POPUP TILE TO OPEN FILE
             tmp=popUpWindow(wm, 3, 30, 5, 5, "Open File:");
             editor_open_file(editor, tmp);
             //CHANGE TITLE OF TILE TO FILE NAME
@@ -57,11 +61,11 @@ void input_handle_key(Editor *editor, Window_manager *wm, int key) {
 void prompt_save_changes(Editor *editor, Window_manager *wm) {
     if(editor->changed==1) {
                 char *response=popUpWindow(wm, 3, 40, 5, 5, "Unsaved Changes! Save this file? (y/n)");
-                 refresh();
+                touchwin(getActiveTileWindow(wm));
+                tile_render(wm->active_tile);
                 if(response[0]=='y' || response[0]=='Y') {
                     tmp=popUpWindow(wm, 3, 30, 5, 5, "Save To:");//TODO-add known file name to input window
-                    file_save_as(editor, tmp, 1);
-                    refresh();
+                    editor_save_file(editor, tmp);
                 }
             }
 }

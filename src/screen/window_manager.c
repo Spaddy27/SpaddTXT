@@ -89,6 +89,7 @@ while ((ch = wgetch(popup)) != '\n' && i < 255) {
 
 noecho();
 delwin(popup);
+//refresh();
 return strdup(input);
 
 

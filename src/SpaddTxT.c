@@ -48,12 +48,7 @@ int main(int argc, char *argv[]) {
         if(active_editor->running==0) {     //CHECK TO ENSURE STILL RUNNING AFTER INPUT
             break;
         }
-         //TODO-resize active tile, not just first tile
-        
-        
-       
         tile_render(active_tile);
-  //  wrefresh(active_window);
     }
         
 

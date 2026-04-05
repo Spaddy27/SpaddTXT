@@ -29,15 +29,6 @@ Tile * init_tile( int height, int width, int y, int x, const char *title) {
     tile->editor->screen_x = width-2;   //ACCOUNT FOR// 
     tile->editor->screen_y = height-2;      //BORDER//
 
-//IF THE EDITOR HAS A FILE, MAKE FILE NAME THE TITLE, OTHERWISE DEFAULT TO UNTITLED
-// if(tile->editor->filename) {
-//     if(strlen(tile->editor->filename)>30) {//ONLY COPY FIRST 30 CHARACTERS IF TITLE TOO LONG
-//         strncpy(tile->title, tile->editor->filename, 30);
-//         tile->title[30] = '\0'; //ENSURE NULL TERMINATION
-//     }
-//     else
-//     strcpy(tile->title, tile->editor->filename);
-// }
 
 set_tile_title(tile, tile->title);
 

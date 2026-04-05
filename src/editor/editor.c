@@ -37,12 +37,14 @@ void editor_shutdown(Editor *editor) {
 }
 
 void editor_open_file(Editor *editor, const char *filename) {
-   
 
     editor->filename = strdup(filename);
     file_open(editor, filename, 1);
-   
-
+}
+void editor_save_file(Editor *editor, const char *filename) {
+    editor->filename = strdup(filename);
+    file_save_as(editor, filename, 1);
+  
 }
 
 
