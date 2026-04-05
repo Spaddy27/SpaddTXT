@@ -50,8 +50,28 @@ void newTile(Window_manager *wm, int height, int width, int starty, int startx, 
     Tile *tile = init_tile(height, width, starty, startx, title);
     wm->tiles[wm->window_count] = tile;
     wm->active_tile = tile;
+    wm->active_index = wm->window_count;
     wm->window_count++;
   }
+
+void insertTile(Window_manager *wm , const char *title) {
+    //GET ACTIVE TILE
+    Tile *active_tile = wm->active_tile;
+    //DETERMINE NEW SIZE AND POSITION FOR NEW TILE
+    int resize_height = active_tile->height / 2;
+
+    int newTileHeight = active_tile->height -resize_height;     //INSERTING VERTICALLY, SO NEW TILE HEIGHT IS HALF OF ACTIVE TILE HEIGHT
+    int newTileStartY = active_tile->y + resize_height;         //NEW TILE STARTS BELOW ACTIVE TILE, SO START Y IS ACTIVE TILE Y + NEW TILE HEIGHT
+
+    //RESIZE ACTIVE TILE TO MAKE ROOM FOR NEW TILE
+    resizeTile(wm, wm->active_index, resize_height, active_tile->width); 
+
+    newTile(wm, newTileHeight, active_tile->width, newTileStartY, active_tile->x, title);
+
+
+   
+
+}
 
 char* popUpWindow(Window_manager *wm, int height, int width, int starty, int startx, const char *title) {
 

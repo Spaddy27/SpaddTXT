@@ -11,6 +11,8 @@ typedef struct{
   Tile **tiles; //dynamic array of tiles
 
 Tile *active_tile;
+int active_index;
+
 int window_count;
 int screen_x;
 int screen_y;

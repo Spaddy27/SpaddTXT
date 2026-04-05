@@ -9,6 +9,13 @@ char *tmp;
 void input_handle_key(Editor *editor, Window_manager *wm, int key) {
     //TODO-HANDLE TABS and  CTRL + char
     switch (key) {
+        case CTRL('n'):
+            insertTile(wm, "NEWWIN");
+            break;
+        case KEY_RESIZE:
+            getmaxyx(stdscr, wm->screen_y, wm->screen_x);
+            resizeTile(wm, 0, wm->screen_y, wm->screen_x); //TODO-RESIZE ALL TILES, NOT JUST ACTIVE TILE
+            break;
         case CTRL('e'):
             prompt_save_changes(editor, wm);
             editor_shutdown(editor);
