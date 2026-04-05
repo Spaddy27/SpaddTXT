@@ -10,9 +10,10 @@ typedef struct{
   //  struct Student *students = malloc(n * sizeof(struct Student));
   Tile **tiles; //dynamic array of tiles
 
+
 Tile *active_tile;
 int active_index;
-
+int capacity; //for dynamic array of tiles, start with capacity of 5 and double when needed
 int window_count;
 int screen_x;
 int screen_y;
@@ -20,6 +21,7 @@ int running;
 }Window_manager;
 WINDOW *getActiveTileWindow(Window_manager *wm);
 Editor *getActiveTileEditor(Window_manager *wm);
+int* tilesInSpace(Window_manager *wm, int starty, int startx, int endy, int endx);
 void newTile(Window_manager *wm, int height, int width, int starty, int startx, const char *title);
 
 char* popUpWindow(Window_manager *wm, int height, int width, int starty, int startx, const char *title);

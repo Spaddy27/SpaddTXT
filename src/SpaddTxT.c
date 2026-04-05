@@ -44,8 +44,8 @@ int main(int argc, char *argv[]) {
     //TODO-handle when editor is closed, close tile, and if no tiles left, close window and exit program
     while(active_editor->running) { 
         active_editor=getActiveTileEditor(&wm);
-     active_window=getActiveTileWindow(&wm);
-     active_tile=wm.active_tile;
+        active_window=getActiveTileWindow(&wm);
+        active_tile=wm.active_tile;
         int ch=wgetch(active_window);
         input_handle_key(active_editor, &wm,ch);
         if(active_editor->running==0) {     //CHECK TO ENSURE STILL RUNNING AFTER INPUT

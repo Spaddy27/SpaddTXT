@@ -7,7 +7,10 @@
 void init_window_manager(Window_manager *wm) {
     wm->running = 1;
     wm->window_count = 0;
+    wm->capacity=5; //INITIAL CAPACITY OF 5 TILES, DOUBLE WHEN NEEDED
+
     Tile **tiles=calloc(5, sizeof(Tile*)); //TODO-dynamic array of tiles
+
     getmaxyx(stdscr, wm->screen_y, wm->screen_x);
     wm->tiles = tiles;
 
@@ -43,10 +46,13 @@ void resizeTile(Window_manager *wm, int index, int new_height, int new_width) {
 }
 
 void newTile(Window_manager *wm, int height, int width, int starty, int startx, const char *title) {
-    if (wm->window_count >= 5) {
-        //TODO-handle max window count
-        return;
-    }
+   
+     if (wm->window_count >= wm->capacity) {
+         wm->capacity *= 2;
+         wm->tiles = realloc(wm->tiles, wm->capacity * sizeof(Tile*));
+     }
+ 
+
     Tile *tile = init_tile(height, width, starty, startx, title);
     wm->tiles[wm->window_count] = tile;
     wm->active_tile = tile;
@@ -58,7 +64,7 @@ void insertTile(Window_manager *wm , const char *title) {
     //GET ACTIVE TILE
     Tile *active_tile = wm->active_tile;
     //DETERMINE NEW SIZE AND POSITION FOR NEW TILE
-    int resize_height = active_tile->height / 2;
+    int resize_height = active_tile->height / 2;            //TODO-ENSURE ROOM TO SPLIT TILE BEFORE RESIZING
 
     int newTileHeight = active_tile->height -resize_height;     //INSERTING VERTICALLY, SO NEW TILE HEIGHT IS HALF OF ACTIVE TILE HEIGHT
     int newTileStartY = active_tile->y + resize_height;         //NEW TILE STARTS BELOW ACTIVE TILE, SO START Y IS ACTIVE TILE Y + NEW TILE HEIGHT
@@ -76,6 +82,7 @@ void insertTile(Window_manager *wm , const char *title) {
 char* popUpWindow(Window_manager *wm, int height, int width, int starty, int startx, const char *title) {
 
      WINDOW *popup = newwin(height, width, starty, startx);
+     int *overlappingIndexes=tilesInSpace(wm, starty, startx, starty+height, startx+width);
 
 box(popup, 0, 0);
 mvwprintw(popup, 0, 2, title);
@@ -108,11 +115,47 @@ while ((ch = wgetch(popup)) != '\n' && i < 255) {
 }
 
 noecho();
+wclear(popup);
+wrefresh(popup);
 delwin(popup);
-//refresh();
+
+if(overlappingIndexes) {
+    for(int i=0; i<(sizeof(overlappingIndexes)/sizeof(overlappingIndexes[0]))-1; i++) {
+        Tile *tile=wm->tiles[overlappingIndexes[i]];
+        box(tile->window, 0, 0);
+        mvwprintw(tile->window, 0, 2, tile->title);
+        tile_render(tile);
+    }
+    free(overlappingIndexes);
+}
 return strdup(input);
 
 
+}
+
+int* tilesInSpace(Window_manager *wm, int starty, int startx, int endy, int endx) {
+    //TODO-RETURN ARRAY OF INDEXES OF TILES THAT OVERLAP WITH GIVEN SPACE
+   int indexes[wm->window_count];
+    int count=0;
+    for(int i=0; i<wm->window_count; i++) {
+        Tile *tile=wm->tiles[i];
+        int tile_starty=tile->y;
+        int tile_endy=tile->y + tile->height;
+        int tile_startx=tile->x;
+        int tile_endx=tile->x + tile->width;
+
+        if(tile_starty < endy && tile_endy > starty && tile_startx < endx && tile_endx > startx) {
+            indexes[count]=i;
+            count++;
+
+        }
+    }
+    if(count>0) {
+        int *result=malloc(count * sizeof(int));
+        memcpy(result, indexes, count * sizeof(int));
+        return result;
+    }
+    return NULL;
 }
 
 void shutdown_window_manager(Window_manager *wm) {
