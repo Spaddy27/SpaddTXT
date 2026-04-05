@@ -1,7 +1,7 @@
 #include <ncurses.h>
 #include "window_manager.h"
 #include "../editor/editor.h"
-#include "../screen/screen.h"
+//#include "../screen/screen.h"
 #include "tile.h"
 
 void init_window_manager(Window_manager *wm) {
@@ -52,6 +52,48 @@ void newTile(Window_manager *wm, int height, int width, int starty, int startx, 
     wm->active_tile = tile;
     wm->window_count++;
   }
+
+char* popUpWindow(Window_manager *wm, int height, int width, int starty, int startx, const char *title) {
+
+     WINDOW *popup = newwin(height, width, starty, startx);
+
+box(popup, 0, 0);
+mvwprintw(popup, 0, 2, title);
+wmove(popup, 1, 1);
+wrefresh(popup);
+
+char input[256];
+int i = 0;
+int ch;
+
+echo();
+keypad(popup, TRUE);
+
+while ((ch = wgetch(popup)) != '\n' && i < 255) {
+    if (ch == KEY_BACKSPACE || ch == 127) {
+        if (i > 0) {
+            i--;
+            input[i] = '\0';
+            // Erase the last character on screen
+            mvwaddch(popup, 1, 1 + i, ' ');
+            wmove(popup, 1, 1 + i);
+        }
+    } else {
+        input[i++] = ch;
+        input[i]   = '\0';
+        // Echo the character inside the border
+        mvwaddch(popup, 1, i, ch);
+    }
+    wrefresh(popup);
+}
+
+noecho();
+delwin(popup);
+//refresh();
+return strdup(input);
+
+
+}
 
 void shutdown_window_manager(Window_manager *wm) {
 for (int i = 0; i < wm->window_count; i++) {

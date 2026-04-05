@@ -16,6 +16,7 @@ A tui text editor written in C using ncurses.
 
 ## Planned Features
 
+- Open and manage multiple windows
 - Keyboard shortcuts
 - Clipboard
 - Search functionality
@@ -24,9 +25,10 @@ A tui text editor written in C using ncurses.
 
 ## Next Commit Goals
 
-- Select file to open or save to
+- Open multiple windows
+- Differentiate the active window
 - Handle different file formats(ex. DOS)
-- Fix scrolling issues
+
 
 ## Build
 
@@ -42,13 +44,15 @@ make
 
 Run:
 
-./SpaddTxT
+./SpaddTxT [file_name]
 
 ## Commands
 
-Quit: CTRL+E
+Quit: CTRL+e
 
+Open: CTRL+o
 
+Save As: CTRL+s
 ## Goals of This Project
 
 This project is intended to deepen understanding of:

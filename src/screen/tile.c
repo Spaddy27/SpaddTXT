@@ -29,15 +29,8 @@ Tile * init_tile( int height, int width, int y, int x, const char *title) {
     tile->editor->screen_x = width-2;   //ACCOUNT FOR// 
     tile->editor->screen_y = height-2;      //BORDER//
 
-//IF THE EDITOR HAS A FILE, MAKE FILE NAME THE TITLE, OTHERWISE DEFAULT TO UNTITLED
-if(tile->editor->filename) {
-    if(strlen(tile->editor->filename)>30) {//ONLY COPY FIRST 30 CHARACTERS IF TITLE TOO LONG
-        strncpy(tile->title, tile->editor->filename, 30);
-        tile->title[30] = '\0'; //ENSURE NULL TERMINATION
-    }
-    else
-    strcpy(tile->title, tile->editor->filename);
-}
+
+set_tile_title(tile, tile->title);
 
 
   
@@ -62,7 +55,30 @@ Editor *get_tile_editor(Tile *tile) {
     return tile->editor;
 }
 
+void set_tile_title(Tile *tile, const char *title) {
+    //CLEAR PREVIOUS 
+    memset(tile->title, '\0', 31);
+    
+  if(tile->editor->filename) {
+    if(strlen(tile->editor->filename)>30) {//ONLY COPY FIRST 30 CHARACTERS IF TITLE TOO LONG
+        strncpy(tile->title, tile->editor->filename, 30);
+        tile->title[30] = '\0'; //ENSURE NULL TERMINATION
+    }
+    else
+    strcpy(tile->title, tile->editor->filename);
+}
+//REDRAW TITLE AND BOX
+    wclear(tile->window);
+    box(tile->window, 0, 0);
+    mvwprintw(tile->window, 0, 2, tile->title);
+    wrefresh(tile->window);
 
+}
+void change_editor(Tile *tile, Editor *new_editor) {
+    tile->editor = new_editor;
+    set_tile_title(tile, tile->title);
+    tile_render(tile);
+}
 void tile_render(Tile *tile) {
    
     Editor *editor = tile->editor;
