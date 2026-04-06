@@ -36,6 +36,9 @@ set_tile_title(tile, tile->title);
   
 //WINDOW
     tile->window = newwin(tile->height, tile->width, tile->y, tile->x);
+    noecho(); /* Don't echo() while we do getch */
+    cbreak(); /* Line buffering disabled, Pass on everty thing to me */
+    // wraw(tile->window);
     box(tile->window, 0, 0);
     mvwprintw(tile->window, 0, 2, tile->title);
     keypad(tile->window, TRUE);
