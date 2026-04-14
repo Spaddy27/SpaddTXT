@@ -13,6 +13,7 @@ int main(int argc, char *argv[]) {
     //INTITIALIZATION FOR NCURSES
     setlocale(LC_ALL, "");
     initscr();
+    start_color();
     raw(); 
     noecho(); /* Don't echo() while we do getch */
     cbreak(); /* Line buffering disabled, Pass on everty thing to me */

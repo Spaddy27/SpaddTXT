@@ -11,7 +11,8 @@ typedef struct {
     int height;
     int x;
     int y;
-    char *title;  
+    char *title;
+    int isActive;  
 
 }Tile;
 

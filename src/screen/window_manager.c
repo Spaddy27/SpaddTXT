@@ -14,8 +14,9 @@ void init_window_manager(Window_manager *wm) {
     getmaxyx(stdscr, wm->screen_y, wm->screen_x);
     wm->tiles = tiles;
 
-
+        
     newTile(wm, wm->screen_y, wm->screen_x, 0, 0, "untitled");
+    
 }
 
 WINDOW *getActiveTileWindow(Window_manager *wm) {
@@ -60,12 +61,13 @@ void newTile(Window_manager *wm, int height, int width, int starty, int startx, 
     wm->window_count++;
   }
 
-void insertTile(Window_manager *wm , const char *title) {
+void insertTile(Window_manager *wm , char direction, const char *title) {
     //GET ACTIVE TILE
     Tile *active_tile = wm->active_tile;
+
+    if(direction=='v') {
     //DETERMINE NEW SIZE AND POSITION FOR NEW TILE
     int resize_height = active_tile->height / 2;            //TODO-ENSURE ROOM TO SPLIT TILE BEFORE RESIZING
-
     int newTileHeight = active_tile->height -resize_height;     //INSERTING VERTICALLY, SO NEW TILE HEIGHT IS HALF OF ACTIVE TILE HEIGHT
     int newTileStartY = active_tile->y + resize_height;         //NEW TILE STARTS BELOW ACTIVE TILE, SO START Y IS ACTIVE TILE Y + NEW TILE HEIGHT
 
@@ -73,8 +75,20 @@ void insertTile(Window_manager *wm , const char *title) {
     resizeTile(wm, wm->active_index, resize_height, active_tile->width); 
 
     newTile(wm, newTileHeight, active_tile->width, newTileStartY, active_tile->x, title);
+    }
+    else if(direction=='h') {
+        //DETERMINE NEW SIZE AND POSITION FOR NEW TILE
+    int resize_width = active_tile->width / 2;            //TODO-ENSURE ROOM TO SPLIT TILE BEFORE RESIZING
+    int newTileWidth = active_tile->width -resize_width;     //INSERTING HORIZONTALLY, SO NEW TILE WIDTH IS HALF OF ACTIVE TILE WIDTH
+    int newTileStartX = active_tile->x + resize_width;         //NEW TILE STARTS TO THE RIGHT OF ACTIVE TILE, SO START X IS ACTIVE TILE X + NEW TILE WIDTH  
+
+    resizeTile(wm, wm->active_index, active_tile->height, resize_width);
+    wm->active_tile->isActive=0;
+    
+    newTile(wm, active_tile->height, newTileWidth, active_tile->y, newTileStartX, title);
 
 
+    }
    
 
 }
@@ -179,7 +193,7 @@ void changeFocus(Window_manager *wm, char direction) {
                        if(tile->y + tile->height == active_starty) {
                            wm->active_tile = tile;
                            wm->active_index = overlappingIndexes[i];
-                           break;
+//return;
                        }
                     }
                 }
@@ -192,7 +206,7 @@ void changeFocus(Window_manager *wm, char direction) {
                             if(tile->y  == active_endy) {
                                 wm->active_tile = tile;
                                 wm->active_index = overlappingIndexes[i];
-                                break;
+                             //  return;
                             }
                         }
                     }    
@@ -206,27 +220,42 @@ void changeFocus(Window_manager *wm, char direction) {
                        if(tile->x + tile->width == active_startx) {
                            wm->active_tile = tile;
                            wm->active_index = overlappingIndexes[i];
-                           break;
+                         //  return;
                        }
                     }
                 }
                 break;
-                case 'k':               //RIGHT:the diff of endx of current tile and startx of target tile is -1
+                case 'k':               
+                //RIGHT:the diff of endx of current tile and startx of target tile is -1
                  if(active_endx != wm->screen_x) {
                    int* overlappingIndexes=tilesInSpace(wm, active_endy, active_startx, active_endy, wm->screen_x);
                    for(int i=0; i<(sizeof(overlappingIndexes)/sizeof(overlappingIndexes[0]))-1; i++) {
                        Tile *tile=wm->tiles[overlappingIndexes[i]];
-                       if(tile->x == active_endx) {
+                       if(tile->x == active_endx+1) {
                            wm->active_tile = tile;
                            wm->active_index = overlappingIndexes[i];
-                           break;
+                          // return;
                        }
                     }
                 } 
                 break;
+                default:
+                    break;
              }
-                    
-            
+        //UNHIGHLIGHT old active tile
+        active_tile->isActive=0;
+        box(active_tile->window, 0, 0);
+        mvwprintw(active_tile->window, 0, 2, active_tile->title);
+        tile_render(active_tile);
+        
+   
+        
+        //HIGHLIGHT NEW ACTIVE WINDOW     
+        init_pair(1, COLOR_RED, COLOR_BLACK);
+        wattron(getActiveTileWindow(wm), COLOR_PAIR(1));
+        box(getActiveTileWindow(wm), 0, 0);
+        wattroff(getActiveTileWindow(wm), COLOR_PAIR(1));     
+        mvwprintw(getActiveTileWindow(wm), 0, 2, wm->active_tile->title);
     
     
 }
