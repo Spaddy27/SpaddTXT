@@ -3,7 +3,6 @@
 A tui text editor written in C using ncurses.
 
 
-
 ## Features (Current)
 
 - ncurses terminal UI
@@ -13,10 +12,11 @@ A tui text editor written in C using ncurses.
 - Arrow key navigation
 - Line insertion/deletion
 - File opening/saving
+- Open and navigate multiple windows
 
 ## Planned Features
 
-- Open and manage multiple windows
+- Delete Windows
 - Keyboard shortcuts
 - Clipboard
 - Search functionality
@@ -25,8 +25,7 @@ A tui text editor written in C using ncurses.
 
 ## Next Commit Goals
 
-- Open multiple windows
-- Differentiate the active window
+- Handle deleting windows
 - Handle different file formats(ex. DOS)
 
 
@@ -53,6 +52,17 @@ Quit: CTRL+e
 Open: CTRL+o
 
 Save As: CTRL+s
+
+New Window: CTRL+n 
+ - h -> split current window and add new below
+ - v -> split current window and add new to the right
+
+Switch Window: CTRL+w
+ - u -> UP 
+ - j -> DOWN
+ - h -> LEFT
+ - k -> RIGHT
+
 ## Goals of This Project
 
 This project is intended to deepen understanding of:

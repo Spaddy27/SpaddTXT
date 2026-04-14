@@ -110,6 +110,7 @@ void tile_render(Tile *tile) {
         editor->cursor_x - editor->x_offset +1
     );
 
+    doupdate();
 
     wrefresh(tile->window);
 }
