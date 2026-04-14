@@ -36,7 +36,14 @@ set_tile_title(tile, tile->title);
   
 //WINDOW
     tile->window = newwin(tile->height, tile->width, tile->y, tile->x);
+    noecho(); /* Don't echo() while we do getch */
+    cbreak(); /* Line buffering disabled, Pass on everty thing to me */
+    tile->isActive=1;
+    
+    init_pair(1, COLOR_RED, COLOR_BLACK);
+    wattron(tile->window, COLOR_PAIR(1));
     box(tile->window, 0, 0);
+    wattroff(tile->window, COLOR_PAIR(1)); 
     mvwprintw(tile->window, 0, 2, tile->title);
     keypad(tile->window, TRUE);
   
@@ -88,12 +95,22 @@ void tile_render(Tile *tile) {
     _scroll(editor);
 
     tile_draw_rows(tile);
+    if(tile->isActive)
+{
+        init_pair(1, COLOR_RED, COLOR_BLACK);
+        wattron(tile->window, COLOR_PAIR(1));
+        box(tile->window, 0, 0);
+        wattroff(tile->window, COLOR_PAIR(1));     
+        mvwprintw(tile->window, 0, 2, tile->title);
+}
 
     wmove(
         tile->window,
         editor->cursor_y - editor->y_offset +1,
         editor->cursor_x - editor->x_offset +1
     );
+
+    doupdate();
 
     wrefresh(tile->window);
 }

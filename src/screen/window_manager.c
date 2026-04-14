@@ -14,8 +14,9 @@ void init_window_manager(Window_manager *wm) {
     getmaxyx(stdscr, wm->screen_y, wm->screen_x);
     wm->tiles = tiles;
 
-
+        
     newTile(wm, wm->screen_y, wm->screen_x, 0, 0, "untitled");
+    
 }
 
 WINDOW *getActiveTileWindow(Window_manager *wm) {
@@ -60,21 +61,34 @@ void newTile(Window_manager *wm, int height, int width, int starty, int startx, 
     wm->window_count++;
   }
 
-void insertTile(Window_manager *wm , const char *title) {
+void insertTile(Window_manager *wm , char direction, const char *title) {
     //GET ACTIVE TILE
     Tile *active_tile = wm->active_tile;
+
+    if(direction=='h') {
     //DETERMINE NEW SIZE AND POSITION FOR NEW TILE
     int resize_height = active_tile->height / 2;            //TODO-ENSURE ROOM TO SPLIT TILE BEFORE RESIZING
-
     int newTileHeight = active_tile->height -resize_height;     //INSERTING VERTICALLY, SO NEW TILE HEIGHT IS HALF OF ACTIVE TILE HEIGHT
     int newTileStartY = active_tile->y + resize_height;         //NEW TILE STARTS BELOW ACTIVE TILE, SO START Y IS ACTIVE TILE Y + NEW TILE HEIGHT
 
     //RESIZE ACTIVE TILE TO MAKE ROOM FOR NEW TILE
     resizeTile(wm, wm->active_index, resize_height, active_tile->width); 
-
+    wm->active_tile->isActive=0;
     newTile(wm, newTileHeight, active_tile->width, newTileStartY, active_tile->x, title);
+    }
+    else if(direction=='v') {
+        //DETERMINE NEW SIZE AND POSITION FOR NEW TILE
+    int resize_width = active_tile->width / 2;            //TODO-ENSURE ROOM TO SPLIT TILE BEFORE RESIZING
+    int newTileWidth = active_tile->width -resize_width;     //INSERTING HORIZONTALLY, SO NEW TILE WIDTH IS HALF OF ACTIVE TILE WIDTH
+    int newTileStartX = active_tile->x + resize_width;         //NEW TILE STARTS TO THE RIGHT OF ACTIVE TILE, SO START X IS ACTIVE TILE X + NEW TILE WIDTH  
+
+    resizeTile(wm, wm->active_index, active_tile->height, resize_width);
+    wm->active_tile->isActive=0;
+    
+    newTile(wm, active_tile->height, newTileWidth, active_tile->y, newTileStartX, title);
 
 
+    }
    
 
 }
@@ -120,7 +134,7 @@ wrefresh(popup);
 delwin(popup);
 
 if(overlappingIndexes) {
-    for(int i=0; i<(sizeof(overlappingIndexes)/sizeof(overlappingIndexes[0]))-1; i++) {
+    for(int i=0; overlappingIndexes[i] != -1; i++) {
         Tile *tile=wm->tiles[overlappingIndexes[i]];
         box(tile->window, 0, 0);
         mvwprintw(tile->window, 0, 2, tile->title);
@@ -134,7 +148,6 @@ return strdup(input);
 }
 
 int* tilesInSpace(Window_manager *wm, int starty, int startx, int endy, int endx) {
-    //TODO-RETURN ARRAY OF INDEXES OF TILES THAT OVERLAP WITH GIVEN SPACE
    int indexes[wm->window_count];
     int count=0;
     for(int i=0; i<wm->window_count; i++) {
@@ -144,18 +157,115 @@ int* tilesInSpace(Window_manager *wm, int starty, int startx, int endy, int endx
         int tile_startx=tile->x;
         int tile_endx=tile->x + tile->width;
 
+        //FIND ANY TILE THAT OVERLAPS WITH THE GIVEN SPACE
         if(tile_starty < endy && tile_endy > starty && tile_startx < endx && tile_endx > startx) {
             indexes[count]=i;
             count++;
-
         }
     }
     if(count>0) {
-        int *result=malloc(count * sizeof(int));
+        int *result=malloc((count+1) * sizeof(int));
         memcpy(result, indexes, count * sizeof(int));
+        result[count] = -1;
         return result;
     }
     return NULL;
+}
+
+void changeFocus(Window_manager *wm, char direction) {
+    Tile *old_active = wm->active_tile;
+    int active_starty = old_active->y;
+    int active_endy = old_active->y + old_active->height;
+    int active_startx = old_active->x;
+    int active_endx = old_active->x + old_active->width;
+
+    switch (direction) {
+        case 'u':  //UP: find tile directly above (its endy == our starty)
+            if(active_starty != 0) {
+                int* overlappingIndexes=tilesInSpace(wm, 0, active_startx, active_starty, active_endx);
+                if(overlappingIndexes) {
+                    for(int i=0; overlappingIndexes[i] != -1; i++) {
+                        Tile *tile=wm->tiles[overlappingIndexes[i]];
+                        if(tile->y + tile->height == active_starty) {
+                            wm->active_tile = tile;
+                            wm->active_index = overlappingIndexes[i];
+                            break;
+                        }
+                    }
+                    free(overlappingIndexes);
+                }
+            }
+            break;
+        case 'j':  //DOWN: find tile directly below (its starty == our endy)
+            if(active_endy != wm->screen_y) {
+                int* overlappingIndexes=tilesInSpace(wm, active_endy, active_startx, wm->screen_y, active_endx);
+                if(overlappingIndexes) {
+                    for(int i=0; overlappingIndexes[i] != -1; i++) {
+                        Tile *tile=wm->tiles[overlappingIndexes[i]];
+                        if(tile->y == active_endy) {
+                            wm->active_tile = tile;
+                            wm->active_index = overlappingIndexes[i];
+                            break;
+                        }
+                    }
+                    free(overlappingIndexes);
+                }
+            }
+            break;
+        case 'h':  //LEFT: find tile directly left (its endx == our startx)
+            if(active_startx != 0) {
+                int* overlappingIndexes=tilesInSpace(wm, active_starty, 0, active_endy, active_startx);
+                if(overlappingIndexes) {
+                    for(int i=0; overlappingIndexes[i] != -1; i++) {
+                        Tile *tile=wm->tiles[overlappingIndexes[i]];
+                        if(tile->x + tile->width == active_startx) {
+                            wm->active_tile = tile;
+                            wm->active_index = overlappingIndexes[i];
+                            break;
+                        }
+                    }
+                    free(overlappingIndexes);
+                }
+            }
+            break;
+        case 'k':  //RIGHT: find tile directly right (its startx == our endx)
+            if(active_endx != wm->screen_x) {
+                int* overlappingIndexes=tilesInSpace(wm, active_starty, active_endx, active_endy, wm->screen_x);
+                if(overlappingIndexes) {
+                    for(int i=0; overlappingIndexes[i] != -1; i++) {
+                        Tile *tile=wm->tiles[overlappingIndexes[i]];
+                        if(tile->x == active_endx) {
+                            wm->active_tile = tile;
+                            wm->active_index = overlappingIndexes[i];
+                            break;
+                        }
+                    }
+                    free(overlappingIndexes);
+                }
+            }
+            break;
+        default:
+            break;
+    }
+
+    if(wm->active_tile != old_active) {
+        //UNHIGHLIGHT old active tile
+        old_active->isActive=0;
+        box(old_active->window, 0, 0);
+        mvwprintw(old_active->window, 0, 2, old_active->title);
+        tile_render(old_active);
+
+        //HIGHLIGHT NEW ACTIVE WINDOW
+        wm->active_tile->isActive=1;
+        // init_pair(1, COLOR_RED, COLOR_BLACK);
+        // wattron(getActiveTileWindow(wm), COLOR_PAIR(1));
+        // box(getActiveTileWindow(wm), 0, 0);
+        // wattroff(getActiveTileWindow(wm), COLOR_PAIR(1));
+        // mvwprintw(getActiveTileWindow(wm), 0, 2, wm->active_tile->title);
+        //wrefresh(getActiveTileWindow(wm));
+        tile_render(wm->active_tile);
+       // wrefresh(getActiveTileWindow(wm));
+    }
 }
 
 void shutdown_window_manager(Window_manager *wm) {

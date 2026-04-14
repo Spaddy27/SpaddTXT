@@ -3,14 +3,26 @@
 
 #include "input.h"
 #include "../editor/editor.h"
+#include "../screen/window_manager.h"
 
 //#include "../screen/screen.h"
 char *tmp;
+int ch;
+ WINDOW *active_window;
 void input_handle_key(Editor *editor, Window_manager *wm, int key) {
     //TODO-HANDLE TABS and  CTRL + char
     switch (key) {
+        case CTRL('w'): //TODO-CTRL +h for moving inside a file
+            //TODO-READ FOR OTHER KEY AND THEN SWITCH TO TILE BASED ON DIRECTION OF KEY (UP, DOWN, LEFT, RIGHT)
+            active_window = getActiveTileWindow(wm);
+           ch = wgetch(active_window);
+
+            changeFocus(wm, ch);
+            break;
         case CTRL('n'):
-            insertTile(wm, "NEWWIN");
+            active_window = getActiveTileWindow(wm);
+            ch = wgetch(active_window);
+            insertTile(wm,ch, "NEWWIN");
             break;
         case KEY_RESIZE:
             getmaxyx(stdscr, wm->screen_y, wm->screen_x);

@@ -13,6 +13,7 @@ int main(int argc, char *argv[]) {
     //INTITIALIZATION FOR NCURSES
     setlocale(LC_ALL, "");
     initscr();
+    start_color();
     raw(); 
     noecho(); /* Don't echo() while we do getch */
     cbreak(); /* Line buffering disabled, Pass on everty thing to me */
@@ -40,7 +41,6 @@ int main(int argc, char *argv[]) {
     }     
    
 
-    //TODO-handle changing windows and active tiles
     //TODO-handle when editor is closed, close tile, and if no tiles left, close window and exit program
     while(active_editor->running) { 
         active_editor=getActiveTileEditor(&wm);
@@ -51,6 +51,11 @@ int main(int argc, char *argv[]) {
         if(active_editor->running==0) {     //CHECK TO ENSURE STILL RUNNING AFTER INPUT
             break;
         }
+        if(active_tile!=wm.active_tile){    //ENSURE TILES PROPERLY RENDERED IF FOCUS HAS CHANGED
+            tile_render(active_tile);
+            active_tile=wm.active_tile;
+        }
+        
         tile_render(active_tile);
     }
         
